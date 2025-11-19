@@ -25,7 +25,7 @@ android {
         applicationId = "com.testapp.notifications.notification_test_app"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
-        minSdk = 21
+        minSdk = flutter.minSdkVersion
         targetSdk = 35
         versionCode = flutter.versionCode
         versionName = flutter.versionName
@@ -42,4 +42,8 @@ android {
 
 flutter {
     source = "../.."
+}
+
+dependencies {
+    implementation("com.microsoft.azure:notification-hubs-android-sdk-fcm:2.0.0")
 }

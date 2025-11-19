@@ -52,13 +52,16 @@ class NotificationHomePage extends StatefulWidget {
 }
 
 class _NotificationHomePageState extends State<NotificationHomePage> {
+  static const platform = MethodChannel("azure_nh_channel");
   String _fcmToken = 'Loading...';
+  String _azureId = 'Loading...';
   String _deviceId = 'Loading...';
   String _deviceInfo = 'Loading...';
   String _appInfo = 'Loading...';
   final List<String> _notifications = [];
   bool _notificationPermission = false;
   bool _firebaseInitialized = false;
+  bool _azureInitialized = false;
 
   @override
   void initState() {
@@ -89,6 +92,7 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
       await _requestNotificationPermission();
       await _getFCMToken();
       _setupFirebaseMessaging();
+      _listenToAzureNativeNotifications(); 
     }
   }
 
@@ -215,7 +219,7 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
       });
     }
   }
-
+  
   void _setupFirebaseMessaging() {
     if (!_firebaseInitialized) return;
     
@@ -263,6 +267,34 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
       const SnackBar(content: Text('Copied to clipboard!')),
     );
   }
+
+  void _listenToAzureNativeNotifications() {
+    platform.setMethodCallHandler((call) async {
+      switch(call.method) {
+        case "onNotificationReceived":
+          final payload = Map<String, dynamic>.from(call.arguments);
+          print("Azure Notification: $payload");
+          setState(() {
+            _notifications.insert(
+              0,
+              'AZURE NATIVE: ${DateTime.now()}\n'
+              'Data: ${payload.toString()}'
+            );
+          });
+          debugPrint('🔥 Azure Notification received in Flutter: ${payload.toString()}');
+          break;
+        case "azureInstallationId":
+          print("Azure Installation ID: ${call.arguments}");
+          setState(() {
+            _azureId = call.arguments;
+          });
+          break;
+        default:
+          print("Unknown method called from native: ${call.method}");
+      }
+    });
+  }
+
 
   Widget _buildInfoCard(String title, String content, {bool copyable = false}) {
     return Card(
@@ -330,6 +362,7 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
               ),
             ),
             _buildInfoCard('FCM Token', _fcmToken, copyable: true),
+            _buildInfoCard('Azure Installation ID', _azureId, copyable: true),
             _buildInfoCard('Device ID', _deviceId, copyable: true),
             _buildInfoCard('Device Information', _deviceInfo),
             _buildInfoCard('App Information', _appInfo),
