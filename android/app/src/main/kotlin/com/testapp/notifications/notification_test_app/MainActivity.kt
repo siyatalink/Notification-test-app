@@ -33,7 +33,7 @@ class MainActivity : FlutterActivity() {
         NotificationHub.start(
             application,
             "Notify",
-            "Endpoint=sb://grid-smart-test.servicebus.windows.net/;SharedAccessKeyName=Test-key;SharedAccessKey=PX7OdO7bGLTSsnknjjrGgil2cGBwt4c4dRhjO//ZtQM="
+            "Endpoint=sb://grid-smart-test.servicebus.windows.net/;SharedAccessKeyName=Test-key;SharedAccessKey=<Key//ZtQM=>"
         )
 
         val installationId = NotificationHub.getInstallationId()

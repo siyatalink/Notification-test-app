@@ -16,7 +16,7 @@ class FirebaseService : FirebaseMessagingService() {
         NotificationHub.start(
             application,
             "Notify",   // Hub name
-            "Endpoint=sb://grid-smart-test.servicebus.windows.net/;SharedAccessKeyName=Test-key;SharedAccessKey=PX7OdO7bGLTSsnknjjrGgil2cGBwt4c4dRhjO//ZtQM="
+            "Endpoint=sb://grid-smart-test.servicebus.windows.net/;SharedAccessKeyName=Test-key;SharedAccessKey=<key//ZtQM=>"
         )
 
         Log.d("AzureNH", "Azure NH re-registration triggered")
